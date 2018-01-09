@@ -1,7 +1,9 @@
 package com.baizhi.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.baizhi.service.BaiZhiPageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,8 @@ import com.baizhi.service.BaiZhiUserService;
 public class BaiZhiUserController {
 	@Autowired
 	private BaiZhiUserService service;
+	@Autowired
+	private BaiZhiPageService baiZhiPageService;
 	public BaiZhiUserService getService() {
 		return service;
 	}
@@ -22,11 +26,19 @@ public class BaiZhiUserController {
 		this.service = service;
 	}
 	@RequestMapping("tologin")
-	public String toupload(){
+	public String toupload(HttpServletRequest request){
+		String status = (String) request.getSession().getAttribute("languageStatus");
+		String content = baiZhiPageService.queryContentByPageNameAndStatus("login.jsp", status);
+		String[] contents = content.split("_");
+		request.setAttribute("contents",contents);
 		return "login";
 	}
 	@RequestMapping("toreg")
-	public String toreg(){
+	public String toreg(HttpServletRequest request){
+		String status = (String) request.getSession().getAttribute("languageStatus");
+		String content = baiZhiPageService.queryContentByPageNameAndStatus("reg.jsp", status);
+		String[] contents = content.split("_");
+		request.setAttribute("contents",contents);
 		return "reg";
 	}
 	@RequestMapping("login")
