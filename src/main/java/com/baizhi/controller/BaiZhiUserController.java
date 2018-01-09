@@ -45,12 +45,20 @@ public class BaiZhiUserController {
 	public String login(HttpSession session,String username,String password){
 		BaiZhiUser user = service.login(username, password);
 		session.setAttribute("user", user);
-		return "/main";
+		return "forword:tomain";
 	}
 	@RequestMapping("reg")
 	public String reg(HttpSession session,BaiZhiUser user){
 		BaiZhiUser reg = service.reg(user);
 		session.setAttribute("user", reg);
+		return "forword:/user/tomain";
+	}
+	@RequestMapping("tomain")
+	public String toMain(HttpServletRequest request){
+		String status = (String) request.getSession().getAttribute("languageStatus");
+		String content = baiZhiPageService.queryContentByPageNameAndStatus("main.jsp", status);
+		String[] contents = content.split("_");
+		request.setAttribute("contents",contents);
 		return "/main";
 	}
 }
